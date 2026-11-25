@@ -1,34 +1,54 @@
 <!doctype html>
 <html lang="he" dir="rtl">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>סימולטור בחינה בסוכרת</title>
-<link rel="stylesheet" href="assets/styles.css">
-<header><p>כלי לבוחנת · קורס על־בסיסי בסוכרת</p><h1>סימולטור בחינה בסוכרת</h1></header>
-<main>
-<section class="card toolbar" aria-label="בחירת תרחיש">
-  <label for="station" style="margin:0">תחנת בחינה</label>
-  <select id="station" style="width:auto;max-width:100%"></select>
-  <span class="muted">לשימוש הבוחנת · הנתונים בתרחישים מדומים</span>
-</section>
-<section class="card toolbar" aria-label="ניהול זמן">
-  <span class="timer" id="timer" dir="ltr" aria-label="זמן שנותר">12:00</span>
-  <button type="button" class="primary" id="run">התחלת תחנה</button>
-  <button type="button" id="reset">איפוס תחנה</button>
-  <span id="timerStatus" role="status"></span>
-</section>
-<section class="card rubric" aria-labelledby="rubricTitle">
-  <h2 id="rubricTitle">מחוון הערכה</h2>
-  <p class="muted">0 = לא הודגם · 1 = חלקי מאוד · 2 = חלקי · 3 = כמעט מלא · 4 = מלא. לחיצה חוזרת מבטלת סימון.</p>
-  <div id="rubric"></div>
-  <div id="oral"><h2>שאלות המשך בעל פה</h2>
-  <details><summary>איזו בדיקה תציעי לאחר הלידה ומתי?</summary><p>העמסת גלוקוז של 75 גרם, 4–12 שבועות אחרי הלידה, לזיהוי אי־סבילות לגלוקוז או סוכרת. <a href="#source">עמ׳ 4</a></p></details>
-  <details><summary>מה תעשי אם ערכי הסוכר נשארים מעל היעד?</summary><p>אבדוק את דפוס המדידות ואת היכולת ליישם את התוכנית, ואעביר לצוות המטפל להערכת הצורך בטיפול תרופתי, לרבות אינסולין. <a href="#source">עמ׳ 3–4</a></p></details>
-  <details><summary>איך תוודאי שלימור יכולה ליישם את תוכנית המעקב?</summary><p>אבקש ממנה להסביר במילים שלה מתי תמדוד, איך תתעד ומה תעשה אם תראה ערכים מעל היעד. יחד נמצא זמן מדידה שמתאים לשגרה שלה.</p></details>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#103d42">
+  <title>סימולטור בחינה בסוכרת</title>
+  <link rel="stylesheet" href="assets/styles.css?v=2">
+  <script src="assets/stations.js" defer></script>
+  <script src="assets/exam.js?v=2" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#clinicalCase">דילוג לתחנה הפעילה</a>
+<header class="masthead">
+  <div class="shell masthead-inner">
+    <div class="brand" dir="ltr"><span class="brand-mark" aria-hidden="true"></span>Diabetes Academy</div>
+    <span class="masthead-label">קורס על־בסיסי בסוכרת</span>
   </div>
-</section>
-<aside>
-  <section class="card case" id="clinicalCase">
+</header>
+<main class="shell">
+  <section class="hero" aria-labelledby="pageTitle">
+    <div class="hero-copy">
+      <p class="eyebrow">סביבת עבודה לבוחנת</p>
+      <h1 id="pageTitle">סימולטור בחינה בסוכרת</h1>
+      <p>בחרי תחנה כדי לפתוח את המקרה, המחוון ושאלות ההמשך.</p>
+    </div>
+  </section>
+
+  <section class="library" aria-labelledby="stationTitle">
+    <h2 id="stationTitle">תחנות בחינה</h2>
+    <div id="stationPicker" class="station-grid" role="group" aria-labelledby="stationTitle"></div>
+  </section>
+
+  <div class="session-bar" aria-label="ניהול הבחינה">
+    <div class="session-timer">
+      <span id="timer" class="timer" dir="ltr" aria-label="זמן שנותר">12:00</span>
+      <span id="timerStatus" class="timer-status" role="status"></span>
+    </div>
+    <div class="session-actions">
+      <button type="button" class="primary" id="run">התחלת תחנה</button>
+      <button type="button" class="quiet" id="reset">איפוס</button>
+    </div>
+    <div class="session-progress">
+      <span id="progressText">0 מתוך 0 סומנו</span>
+      <progress id="examProgress" max="1" value="0" aria-label="התקדמות במילוי המחוון"></progress>
+    </div>
+    <a class="summary-link" href="#examSummary">לסיכום הבחינה</a>
+  </div>
+
+  <div class="workspace">
+    <section class="card case" id="clinicalCase" tabindex="-1">
     <h2>תיאור המקרה</h2>
     <p>לימור, בת 32, בשבוע 25 להיריון השני. היא עובדת כמהנדסת תוכנה ויש לה ילד אחד. בהיריון הקודם אובחנה עם סוכרת היריון. לאמה סוכרת מסוג 2. בבדיקת סקר של 50 גרם התקבל גלוקוז של 152 מ״ג/ד״ל.</p>
     <p><strong>משימת הנבחנת</strong> · בצעי אומדן, הציעי תוכנית טיפול ומעקב והדריכי את לימור.</p>
@@ -38,22 +58,35 @@
     </details>
     <details><summary>דף לשחקנית</summary><p>את מודאגת כי אמרו לך להגיע למרפאת סוכרת. אם שואלים, ספרי שאת יודעת להשתמש במד סוכר מההיריון הקודם ושאז הספיק שינוי תזונתי. את חוששת שהעבודה והטיפול בילד יקשו עלייך להתמיד.</p><p>אפשר לשאול ״שוב סוכרת?״ או ״מה יקרה אם יהיו לי מדי פעם מדידות גבוהות?״</p></details>
   </section>
-  <section class="card">
-    <h2>סיכום הבחינה</h2>
-    <output id="result" aria-live="polite"></output>
-    <label for="grade">הערכה כוללת של הבוחנת</label>
-    <select id="grade"><option value="">בחירת טווח ציון</option><option>פחות מ־60</option><option>60–69</option><option>70–79</option><option>80–89</option><option>90–100</option></select>
-    <label for="feedback">משוב לנבחנת</label>
-    <textarea id="feedback" rows="4" placeholder="מה בוצע היטב ומה כדאי לשפר"></textarea>
-    <div class="actions"><button id="download" type="button">הורדת סיכום</button></div>
-    <p class="muted">הסימון נשמר במסך עד לאיפוס או לסגירה. אפשר להוריד סיכום לפני כן.</p>
-  </section>
-  <section class="card case" id="source"><h2>מקור קליני</h2><a href="https://ima-contentfiles.s3.amazonaws.com/Ne219_GestationalDiabetes.pdf" target="_blank" rel="noopener noreferrer">נייר עמדה ישראלי בנושא סוכרת הריונית, 2023</a><p class="muted">עמ׳ 3 — אבחון ויעדי איזון. עמ׳ 4 — טיפול, ניטור ומעקב אחרי הלידה.</p></section>
-</aside>
+    <section class="card rubric" aria-labelledby="rubricTitle">
+      <div class="rubric-heading">
+        <div>
+          <h2 id="rubricTitle">מחוון הערכה</h2>
+          <p class="muted">0 = לא הודגם · 4 = הודגם במלואו. לחיצה חוזרת מבטלת סימון.</p>
+        </div>
+        <button type="button" class="filter-button" id="onlyUnscored" aria-pressed="false">רק סעיפים שטרם סומנו</button>
+      </div>
+      <div id="rubric"></div>
+      <p id="filteredEmpty" class="empty-state" hidden>כל הסעיפים סומנו.</p>
+    </section>
+    <section class="card oral" id="oral"><h2>שאלות המשך בעל פה</h2>
+  <details><summary>איזו בדיקה תציעי לאחר הלידה ומתי?</summary><p>העמסת גלוקוז של 75 גרם, 4–12 שבועות אחרי הלידה, לזיהוי אי־סבילות לגלוקוז או סוכרת. <a href="#source">עמ׳ 4</a></p></details>
+  <details><summary>מה תעשי אם ערכי הסוכר נשארים מעל היעד?</summary><p>אבדוק את דפוס המדידות ואת היכולת ליישם את התוכנית, ואעביר לצוות המטפל להערכת הצורך בטיפול תרופתי, לרבות אינסולין. <a href="#source">עמ׳ 3–4</a></p></details>
+  <details><summary>איך תוודאי שלימור יכולה ליישם את תוכנית המעקב?</summary><p>אבקש ממנה להסביר במילים שלה מתי תמדוד, איך תתעד ומה תעשה אם תראה ערכים מעל היעד. יחד נמצא זמן מדידה שמתאים לשגרה שלה.</p></details></section>
+    <section class="card summary-card" id="examSummary" aria-labelledby="summaryTitle">
+      <h2 id="summaryTitle">סיכום הבחינה</h2>
+      <output id="result" aria-live="polite"></output>
+      <label for="grade">הערכה כוללת של הבוחנת</label>
+      <select id="grade"><option value="">בחירת טווח ציון</option><option>פחות מ־60</option><option>60–69</option><option>70–79</option><option>80–89</option><option>90–100</option></select>
+      <label for="feedback">משוב לנבחנת</label>
+      <textarea id="feedback" rows="4" placeholder="מה בוצע היטב ומה כדאי לשפר"></textarea>
+      <button id="download" class="primary" type="button">הורדת סיכום</button>
+      <p class="muted">הורידי את הסיכום לפני איפוס או סגירת הדף.</p>
+    </section>
+    <section class="card source-card" id="source"><h2>מקור קליני</h2><a href="https://ima-contentfiles.s3.amazonaws.com/Ne219_GestationalDiabetes.pdf" target="_blank" rel="noopener noreferrer">נייר עמדה ישראלי בנושא סוכרת הריונית, 2023</a><p class="muted">עמ׳ 3 — אבחון ויעדי איזון. עמ׳ 4 — טיפול, ניטור ומעקב אחרי הלידה.</p></section>
+  </div>
 </main>
 <dialog id="resetDialog"><form method="dialog"><h2>לאפס את התחנה?</h2><p>הטיימר, הסימונים, הציון והמשוב יימחקו מהמסך.</p><div class="actions"><button value="cancel" autofocus>חזרה לבחינה</button><button value="reset">איפוס</button></div></form></dialog>
 <dialog id="switchDialog"><form method="dialog"><h2>לעבור לתחנה אחרת?</h2><p>אפשר להוריד את הסיכום לפני המעבר. המעבר מאפס את הבחינה הנוכחית.</p><div class="actions"><button value="cancel" autofocus>חזרה לבחינה</button><button value="switch">מעבר לתחנה</button></div></form></dialog>
-<script src="assets/stations.js"></script>
-<script src="assets/exam.js"></script>
+</body>
 </html>
-
