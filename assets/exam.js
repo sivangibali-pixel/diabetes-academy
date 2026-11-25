@@ -4,43 +4,49 @@ let ratings = [];
 let rateButtons = [];
 const rubric = byId('rubric');
 function renderRubric() {
-rubric.replaceChildren();
-ratings = Array(criteria.length).fill(null);
-rateButtons = [];
-for (const [index, [title, guidance]] of criteria.entries()) {
-  const row = document.createElement('section');
-  row.className = 'criterion';
-  const label = document.createElement('p');
-  label.id = 'criterion-' + index;
-  label.textContent = title;
-  label.style.fontWeight = '650';
-  const details = document.createElement('details');
-  const summary = document.createElement('summary');
-  summary.textContent = 'דגשים להערכה';
-  const description = document.createElement('p');
-  description.textContent = guidance;
-  details.append(summary, description);
-  const scores = document.createElement('div');
-  scores.className = 'scores';
-  scores.setAttribute('role', 'group');
-  scores.setAttribute('aria-labelledby', label.id);
-  const buttons = [];
-  for (let value = 0; value <= 4; value++) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = value;
-    button.setAttribute('aria-pressed', 'false');
-    button.addEventListener('click', () => {
-      ratings[index] = ratings[index] === value ? null : value;
-      paintScores();
-    });
-    scores.append(button);
-    buttons.push(button);
+  rubric.replaceChildren();
+  ratings = Array(criteria.length).fill(null);
+  rateButtons = [];
+
+  for (const [index, [title, guidance]] of criteria.entries()) {
+    const row = document.createElement('section');
+    row.className = 'criterion';
+    const label = document.createElement('p');
+    label.id = 'criterion-' + index;
+    label.textContent = title;
+    label.style.fontWeight = '650';
+    row.append(label);
+
+    if (guidance) {
+      const details = document.createElement('details');
+      addText(details, 'summary', 'דגשים להערכה');
+      addText(details, 'p', guidance);
+      row.append(details);
+    }
+
+    const scores = document.createElement('div');
+    scores.className = 'scores';
+    scores.setAttribute('role', 'group');
+    scores.setAttribute('aria-labelledby', label.id);
+    const buttons = [];
+
+    for (let value = 0; value <= 4; value++) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = value;
+      button.setAttribute('aria-pressed', 'false');
+      button.addEventListener('click', () => {
+        ratings[index] = ratings[index] === value ? null : value;
+        paintScores();
+      });
+      scores.append(button);
+      buttons.push(button);
+    }
+
+    rateButtons.push(buttons);
+    row.append(scores);
+    rubric.append(row);
   }
-  rateButtons.push(buttons);
-  row.append(label, details, scores);
-  rubric.append(row);
-}
 }
 function paintScores() {
   rateButtons.forEach((buttons, index) => buttons.forEach((button, value) => {
