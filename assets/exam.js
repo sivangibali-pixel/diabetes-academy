@@ -19,7 +19,7 @@ function renderRubric() {
 
     if (guidance) {
       const details = document.createElement('details');
-      addText(details, 'summary', 'דגשים להערכה');
+      addText(details, 'summary', activeStation === 'pregnancy' ? 'תשובה צפויה לבוחנת' : 'דגשים להערכה');
       addText(details, 'p', guidance);
       row.append(details);
     }
